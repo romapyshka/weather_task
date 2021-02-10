@@ -2,8 +2,9 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 
 const api = {
-    key: "2d71286bb9d4a67971e9ff6e1c293ad3",
-    base: "https://api.openweathermap.org/data/2.5/"
+    key: "45a882703e376c6d8873aa87229ebf48",
+    baseForWeather: "https://api.openweathermap.org/data/2.5/",
+    baseForLocation: "https://ipapi.co/json/",
 };
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
 
     useEffect(() => {
         const getLocation = async () => {
-            return fetch('https://ipapi.co/json/', {method: "GET"})
+            return fetch(api.baseForLocation, {method: "GET"})
                 .then(res => res.json())
                 .then(result => {
                     setLocation(result.city);
@@ -26,26 +27,35 @@ function App() {
             getLocation();
         }
     }, []);
-    
+
     async function getLocalWeather() {
         if (catchLocation === true && catchLocalWeather === false) {
-            fetch(`${api.base}weather?q=${location}&appid=${api.key}`)
+            fetch(`${api.baseForWeather}weather?q=${location}&appid=${api.key}`)
                 .then(res => res.json())
                 .then(result => {
-                        setWeather(result);
-                        setCatchLocalWeather(true);
-                    }
-                );
+                    setWeather(result);
+                    setCatchLocalWeather(true);
+                });
         }
+
     }
-    
+
     setTimeout(getLocalWeather, 1);
-    console.log(location);
-    console.log(weather);
-    
+
+    const dateBuilder = (d) => {
+        let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+        let day = days[d.getDay()];
+        let date = d.getDate();
+        let month = months[d.getMonth()];
+
+        return `${day} ${date} ${month}`
+    };
+
     const searchWeather = evt => {
         if (evt.key === "Enter") {
-            fetch(`${api.base}weather?q=${city}&appid=${api.key}`)
+            fetch(`${api.baseForWeather}weather?q=${city}&appid=${api.key}`)
                 .then(res => res.json())
                 .then(result => {
                         setCity('');
@@ -57,7 +67,6 @@ function App() {
 
     return (
         <div className="App">
-            <h2> {weather.name}</h2>
             <div className="search">
                 <input
                     type="text"
@@ -67,14 +76,48 @@ function App() {
                     value={city}
                     onKeyPress={searchWeather}
                 />
+                {(typeof weather.main != "undefined") ? (
+                    <div>
+                        <div className="location_information">
+
+                            <div className="location">
+                                {weather.name},
+                                {weather.sys.country}
+                            </div>
+                            <div className="data">
+                                {dateBuilder(new Date())}
+                            </div>
+
+                        </div>
+
+                        <div className="weather_information">
+
+                            <div className="temp">
+                                15°
+                            </div>
+                            <div className="temp_feels_like">
+                                20°
+                            </div>
+                            <div className="weather_status">
+                                Snow
+                            </div>
+                            <div className="weather_description">
+                                Little snow
+                            </div>
+                            <div className="wind">
+                                3 m/s
+                            </div>
+
+                        </div>
+                    </div>
+                ) : ('')}
+
             </div>
         </div>
     );
 }
 
 export default App;
-
-
 
 
 // useEffect(() => {
