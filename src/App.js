@@ -30,7 +30,7 @@ function App() {
 
     async function getLocalWeather() {
         if (catchLocation === true && catchLocalWeather === false) {
-            fetch(`${api.baseForWeather}weather?q=${location}&appid=${api.key}`)
+            fetch(`${api.baseForWeather}weather?q=${location}&units=metric&appid=${api.key}`)
                 .then(res => res.json())
                 .then(result => {
                     setWeather(result);
@@ -55,7 +55,7 @@ function App() {
 
     const searchWeather = evt => {
         if (evt.key === "Enter") {
-            fetch(`${api.baseForWeather}weather?q=${city}&appid=${api.key}`)
+            fetch(`${api.baseForWeather}weather?q=${city}&units=metric&appid=${api.key}`)
                 .then(res => res.json())
                 .then(result => {
                         setCity('');
@@ -93,16 +93,16 @@ function App() {
                         <div className="weather_information">
 
                             <div className="temp">
-                                15°
+                                {Math.round((weather.main.temp))}°c
 
                                 <div className="weather_status">
-                                    Snow
+                                    {weather.weather[0].main}
                                 </div>
                                 <div className="weather_description">
-                                    Little snow
+                                    {weather.weather[0].description}
                                 </div>
                                 <div className="wind">
-                                    Wind: 3 m/s
+                                    Wind: {weather.wind.speed} m/s
                                 </div>
 
                             </div>
