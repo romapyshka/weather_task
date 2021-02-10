@@ -94,19 +94,19 @@ function App() {
 
                             <div className="temp">
                                 15°
+
+                                <div className="weather_status">
+                                    Snow
+                                </div>
+                                <div className="weather_description">
+                                    Little snow
+                                </div>
+                                <div className="wind">
+                                    Wind: 3 m/s
+                                </div>
+
                             </div>
-                            <div className="temp_feels_like">
-                                20°
-                            </div>
-                            <div className="weather_status">
-                                Snow
-                            </div>
-                            <div className="weather_description">
-                                Little snow
-                            </div>
-                            <div className="wind">
-                                3 m/s
-                            </div>
+
 
                         </div>
                     </div>
