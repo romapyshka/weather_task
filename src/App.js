@@ -1,54 +1,43 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 const api = {
-    key: "c14d884c9ad0731105aa7fcf29448963",
+    key: "2d71286bb9d4a67971e9ff6e1c293ad3",
     base: "https://api.openweathermap.org/data/2.5/"
 };
 
-// navigator.geolocation.getCurrentPosition(
-//     (position) => {
-//       console.log('latitude is: ', position.coords.latitude);
-//       console.log('longitude is: ', position.coords.longitude);
-//     }
-// );
-
 function App() {
-    const [city, setCity] = useState('');
+    const [citySearch, setCitySearch] = useState('');
     const [weather, setWeather] = useState({});
 
-
-    // const Data = fetch(`${api.base}weather?q=${city}&appid=${api.key}`)
-    //     .then(res => res.json())
-    //     .then(result => setWeather(result));
-
-
-    // const getWeather = async () => {
-    //     const api_call = await Promise.all( () => {fetch(`${api.base}weather?q=Uzhgorod&appid=${api.key}`)});
-    //     const data = await api_call.json();
-    // };
-
-
-
-    useEffect(() => {
-      async function getData(city) {
-        return new Promise(() => {
-          fetch(`${api.base}weather?q=${city}&appid=${api.key}`)
-              .then(res => res.json())
-              .then(data => {
-                setWeather(data);
-              })
-        });
-      }
-      getData('Uzhgorod');
-
-    }, []);
+    const search = evt => {
+            if (evt.key === "Enter") {
+                fetch(`${api.base}weather?q=${citySearch}&appid=${api.key}`)
+                    .then(res => res.json())
+                    .then(result => {
+                            setCitySearch('');
+                            setWeather(result);
+                        }
+                    );
+            }
+        }
+    ;
 
     console.log(weather);
 
     return (
         <div className="App">
-            <h2> Welcome user!</h2>
+            <h2> {weather.name}</h2>
+            <div className="search">
+                <input
+                    type="text"
+                    className="search_input"
+                    placeholder="Search"
+                    onChange={e => setCitySearch(e.target.value)}
+                    value={citySearch}
+                    onKeyPress={search}
+                />
+            </div>
         </div>
     );
 }
